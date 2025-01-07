@@ -27,7 +27,7 @@ exports.createApplication = async (req, res) => {
       application,
     });
   } catch (error) {
-    console.error('Error submitting application:', error);
+    console.error('Error submitting application:', error); // Add this line
     res.status(500).json({ message: 'Failed to submit application' });
   }
 };
@@ -43,11 +43,24 @@ exports.updateApplication = async (req, res) => {
   }
 };
 
+exports.getApplicationById = async (req, res) => {
+  try {
+    const application = await Application.findById(req.params.id).populate('pet user');
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
+    res.json(application);
+  } catch (error) {
+    console.error('Error retrieving application by ID:', error);
+    res.status(500).json({ message: 'Failed to retrieve application' });
+  }
+};
 exports.listApplications = async (req, res) => {
   try {
     const applications = await Application.find().populate('pet user');
     res.json(applications);
-  } catch (err) {
+  } catch (error) {
+    console.error('Error retrieving applications:', error);
     res.status(500).json({ message: 'Failed to retrieve applications' });
   }
 };
