@@ -1,13 +1,11 @@
 const express = require('express');
-const { addPet, updatePet, listPets,adoptPet} = require('../controllers/petController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { createPet, updatePet, listPets} = require('../controllers/petController');
 
 const router = express.Router();
 
 
-router.post('/',authMiddleware, addPet);
-router.put('/:id',authMiddleware, updatePet);
-router.get('/',authMiddleware, listPets);
-router.post('/adopt', authMiddleware, adoptPet);
+router.post('/',createPet);
+router.put('/:id', updatePet);
+router.get('/', listPets);
 
 module.exports = router;

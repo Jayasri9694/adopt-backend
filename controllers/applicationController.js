@@ -32,16 +32,25 @@ exports.createApplication = async (req, res) => {
   }
 };
 
-
 exports.updateApplication = async (req, res) => {
   try {
-    const application = await Application.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!application) return res.status(404).json({ message: 'Application not found' });
-    res.json({ message: 'Application updated successfully', application });
-  } catch (err) {
+    const applicationId = req.params.id;
+    const updatedApplication = await Application.findByIdAndUpdate(applicationId, req.body, { new: true });
+
+    if (!updatedApplication) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
+
+    res.status(200).json({
+      message: 'Application updated successfully',
+      application: updatedApplication,
+    });
+  } catch (error) {
+    console.error('Error updating application:', error);
     res.status(500).json({ message: 'Failed to update application' });
   }
 };
+
 
 exports.getApplicationById = async (req, res) => {
   try {

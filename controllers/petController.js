@@ -1,28 +1,32 @@
 const Pet = require('../models/Pet');
 
-exports.addPet = async (req, res) => {
-  const { name, age, breed, description, imageUrl } = req.body;
-
-  if (!name || !age || !breed || !description || !imageUrl) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-
+exports.createPet = async (req, res) => {
   try {
-    const newPet = new Pet({ name, age, breed, description, imageUrl });
-    await newPet.save();
-    res.status(201).json({ message: "Pet added successfully!", pet: newPet });
+    const pet = new Pet(req.body); // Assuming you have a Pet model
+    await pet.save();
+    res.status(201).json({ message: 'Pet created successfully!', pet });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error. Try again later." });
+    console.error('Error creating pet:', error);
+    res.status(500).json({ message: 'Failed to create pet' });
   }
 };
 
+
 exports.updatePet = async (req, res) => {
   try {
-    const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!pet) return res.status(404).json({ message: 'Pet not found' });
-    res.json({ message: 'Pet updated successfully', pet });
-  } catch (err) {
+    const { id } = req.params; // Get the pet ID from the route parameter
+    const updatedPet = await Pet.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updatedPet) {
+      return res.status(404).json({ message: 'Pet not found' });
+    }
+
+    res.status(200).json({
+      message: 'Pet updated successfully',
+      pet: updatedPet,
+    });
+  } catch (error) {
+    console.error('Error updating pet:', error);
     res.status(500).json({ message: 'Failed to update pet' });
   }
 };
