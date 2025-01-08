@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
 const petRoutes = require('./routes/petRoutes'); 
 const adoptRoutes = require('./routes/adoptRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 dotenv.config();
 connectDB();
@@ -26,6 +27,7 @@ app.use('/api/pets', petRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/adopt', adoptRoutes); 
+app.use('/api/feedback', feedbackRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5000;
